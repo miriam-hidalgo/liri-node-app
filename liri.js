@@ -6,11 +6,6 @@ const fs = require("fs");
 var Spotify = require('node-spotify-api');
 const keys = require("./keys.js")
 var spotify = new Spotify(keys.spotify);
-// const artist = process.argv[2]
-// const songName = process.argv[2]
-// const movie = process.argv[2]
-// const command = process.argv[2];
-// const searchTerm = process.argv[3];
 
 inquirer
     .prompt([
@@ -20,20 +15,21 @@ inquirer
             choices: [
                 'Search Spotify',
                 'Search concerts',
-                'Search movies'
+                'Search movies',
+                'Search file'
             ],
-            message: 'What would you like to do'
+            message: 'What would you like to do?'
         },
         {
             name: 'searchTerm',
-            message: 'What would like to search for?'
+            message: 'What would you like to search for?'
         }
     ])
     .then(function(answers) {
         console.log(answers);
         switch(answers.command) {
             case 'Search concerts':
-              concert(answers.searchTerm);
+              searchConcert(answers.searchTerm);
               break;
             case 'Search Spotify':
               searchSpotify(answers.searchTerm)
@@ -41,26 +37,23 @@ inquirer
             case 'Search movies':
               searchMovie(answers.searchTerm)
               break;
+            case 'Search file':
+              searchFile(answers.searchTerm)
+              break;
             default:
-              console.log('Didn\'t recognize the command');
+              console.log("Didn't recognize the command");
           }
     })
 
-
-// var command = ["concert-this", "spotify-this-song", "movie-this", "do-what-it-says"]
-// for (i = 0; i < command.length; i++) { 
-//     command[i]=process.argv[2]
-// }
-
-// 1. node liri.js concert-this <artist/band name here>
-function concert(artist) {
+// Searches concerts
+function searchConcert(artist) {
   request("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp", function (error, response) {
       if (error) throw error
-  console.log(JSON.parse(response.body))
+  console.log(JSON.parse(response.body));
   });
 }
 
-// 2. node liri.js spotify-this-song <song name here>
+// Searches spotify songs
 function searchSpotify(songName){
   spotify.search({ type: 'track', query: songName }, function(err, data) {
     if (err) {
@@ -70,18 +63,19 @@ function searchSpotify(songName){
   });
 }
 
-
-// 3. node liri.js movie-this <movie name here>
+// Searches movies
 function searchMovie(movie){
-  request("http://www.omdbapi.com/?&apikey=trilogy&t="+movie, function (error, response) {
+  request("http://www.omdbapi.com/?&apikey=trilogy&t="+ movie, function (error, response) {
     if (error) throw error
   console.log(JSON.parse(response.body));
 });
 }
 
-
-// 4. node liri.js do-what-it-says
-//    * Using the `fs` Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
-//      * It should run `spotify-this-song` for "I Want it That Way," as follows the text in `random.txt`.
-//      * Edit the text in random.txt to test out the feature for movie-this and concert-this.
-
+// Read the random.txt file and print its contents.
+function searchFile(filename){
+  fs.readFile(filename, 'utf8', function(err, data) {
+    if (err) throw err;
+    console.log('OK: ' + filename);
+    console.log(data)
+  });
+}
