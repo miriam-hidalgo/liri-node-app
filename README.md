@@ -35,8 +35,8 @@ When the user chooses to run the Search movies command he/she will be prompted t
 
 When the user chooses to run Search file command he/she will be prompted to search for a file and the user must enter the filename random.txt as a response. LIRI will read and return what is contained in the file. 
 
-![](Images/File.png)
-![](Images/File2.png)
+![](Images/File.PNG)
+![](Images/File2.PNG)
 
 ## **Portions that are Missing**
 The text file part of the code was really meant to have LIRI use the information in the text file to run any of the three above commands (spotify, concerts, movies). I was unsuccessful in executing that portion of the code, therefore I left it so that LIRI could at least display the contents of the file.
